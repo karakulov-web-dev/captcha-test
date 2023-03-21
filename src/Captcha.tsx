@@ -49,7 +49,8 @@ const Captcha: FC<Props> = ({ onSuccess }) => {
         containerId,
         sitekey: SITEKEY,
         api: `${API_URL}`,
-        callback: handle
+        callback: handle,
+        onErrorCallback: (err: any) => { console.error(err) }
       })
     } catch (err) {
       console.log(err)

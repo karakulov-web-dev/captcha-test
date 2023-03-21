@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Captcha from './Captcha';
+import { ErrorBoundary } from 'react-error-boundary'
 
 
 function App() {
@@ -8,11 +9,15 @@ function App() {
     <div className="App">
       {
         isHuman === false ? (
-          <Captcha
-            onSuccess={() => { setIsHuman(true) }}
-          />
+          <ErrorBoundary
+            fallback={<div>упс</div>}
+          >
+            <Captcha
+              onSuccess={() => { setIsHuman(true) }}
+            />
+          </ErrorBoundary>
         ) : (
-          <div>УРА</div>
+          <div>ура</div>
         )
       }
 
