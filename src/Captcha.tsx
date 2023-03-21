@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import axios from 'axios'
-// humanometr.js' нужно в index.html в хеад поключить
 
 const SITEKEY = "10000000-ffff-ffff-ffff-000000000001"
-const API_URL = 'https://...'
+const API_URL = 'https://humanometr.ru'
 const global: any = window
 
 const checkValid = async (secret: string): Promise<boolean> => {
@@ -20,6 +19,16 @@ const checkValid = async (secret: string): Promise<boolean> => {
   }
 }
 
+let isLoad: boolean = false
+const awaitInitArr: Function[] = []
+
+global.humanometrLoad = () => {
+  isLoad = true
+  awaitInitArr.forEach((init) => {
+    init()
+  })
+}
+
 interface Props {
   onSuccess: () => void
 }
@@ -34,19 +43,34 @@ const Captcha: FC<Props> = ({ onSuccess }) => {
     }
   }
 
-  useEffect(() => {
-    const global: any = window
-    if (typeof global.Humanometr !== 'undefined') {
+  const init = () => {
+    try {
       global.Humanometr.init({
         containerId,
         sitekey: SITEKEY,
-        api: `${API_URL}/api`,
+        api: `${API_URL}`,
         callback: handle
       })
-    } else {
-      console.error('Humanometr is undefined')
+    } catch (err) {
+      console.log(err)
     }
+  }
 
+  useEffect(() => {
+    if (isLoad) {
+      init()
+    } else {
+      const head = document.getElementsByTagName('head')[0]
+      awaitInitArr.push(init)
+      const script = document.createElement('script')
+      script.src = `${API_URL}/humanometr.js`
+      script.type = "text/javascript"
+      script.onload = () => {
+        init()
+        head.removeChild(script)
+      }
+      head.appendChild(script)
+    }
   }, [])
   return <div id={containerId} />
 }
