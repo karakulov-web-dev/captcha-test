@@ -5,14 +5,6 @@ const API_URL = 'https://93.175.9.104:5002'
 const global: any = window
 
 let isLoad: boolean = false
-const awaitInitArr: Function[] = []
-
-global.humanometrLoad = () => {
-  isLoad = true
-  awaitInitArr.forEach((init) => {
-    init()
-  })
-}
 
 interface Props {
   onSuccess: () => void
@@ -40,11 +32,11 @@ const Captcha: FC<Props> = ({ onSuccess }) => {
       init()
     } else {
       const head = document.getElementsByTagName('head')[0]
-      awaitInitArr.push(init)
       const script = document.createElement('script')
       script.src = `${API_URL}/humanometr.js`
       script.type = "text/javascript"
       script.onload = () => {
+        isLoad = true
         init()
         head.removeChild(script)
       }
