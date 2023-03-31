@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import axios from 'axios'
 
 const SITEKEY = "10000000-ffff-ffff-ffff-000000000001"
-const API_URL = 'https://humanometr.ru'
+const API_URL = 'https://93.175.9.104:5002'
 const global: any = window
 
 const checkValid = async (secret: string): Promise<boolean> => {
@@ -49,7 +49,7 @@ const Captcha: FC<Props> = ({ onSuccess }) => {
         containerId,
         sitekey: SITEKEY,
         api: `${API_URL}`,
-        callback: handle,
+        onPassCallback: onSuccess,
         onErrorCallback: (err: any) => { console.error(err) }
       })
     } catch (err) {
