@@ -1,23 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
-import axios from 'axios'
 
 const SITEKEY = "10000000-ffff-ffff-ffff-000000000001"
 const API_URL = 'https://93.175.9.104:5002'
 const global: any = window
-
-const checkValid = async (secret: string): Promise<boolean> => {
-  const token = global.Humanometr.getToken()
-  try {
-    await axios.post(`${API_URL}/siteverify`, {
-      secret,
-      token,
-      sitekey: SITEKEY
-    })
-    return true
-  } catch (err) {
-    return false
-  }
-}
 
 let isLoad: boolean = false
 const awaitInitArr: Function[] = []
@@ -36,13 +21,6 @@ interface Props {
 const Captcha: FC<Props> = ({ onSuccess }) => {
   const [containerId] = useState(Math.random().toString())
 
-  const handle = async (secret: string) => {
-    const isValid = await checkValid(secret)
-    if (isValid) {
-      onSuccess()
-    }
-  }
-
   const init = () => {
     try {
       global.Humanometr.init({
@@ -50,7 +28,7 @@ const Captcha: FC<Props> = ({ onSuccess }) => {
         sitekey: SITEKEY,
         api: `${API_URL}`,
         onPassCallback: onSuccess,
-        onErrorCallback: (err: any) => { console.error(err) }
+        onErrorCallback: (err: any) => { console.error(new Error('onErrorCallback')) }
       })
     } catch (err) {
       console.log(err)
