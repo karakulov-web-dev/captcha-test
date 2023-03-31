@@ -20,7 +20,7 @@ const Captcha: FC<Props> = ({ api, sitekey, onSuccess }) => {
         sitekey,
         api,
         onPassCallback: onSuccess,
-        onErrorCallback: (err: any) => { console.error(new Error('onErrorCallback')) }
+        onErrorCallback: () => { console.error(new Error('onErrorCallback')) }
       })
     } catch (err) {
       console.log(err)
