@@ -5,13 +5,14 @@ const global: any = window
 let isLoad: boolean = false
 
 interface Props {
+  id?: string
   api: string
   sitekey: string
   onSuccess: () => void
 }
 
-const Captcha: FC<Props> = ({ api, sitekey, onSuccess }) => {
-  const [containerId] = useState(Math.random().toString())
+const Captcha: FC<Props> = ({ id, api, sitekey, onSuccess }) => {
+  const [containerId] = useState(id ?? Math.random().toString())
 
   const init = () => {
     try {
